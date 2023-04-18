@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-deploy
+  namespace: qingyun
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demo-deploy-pod
+      release: canary
+  template:
+    metadata:
+      labels:
+        app: demo-deploy-pod
+        release: canary
+    spec:
+      containers:
+      - name: demo-deploy-pod
+        image: zhangyyhub/myapp:v1.0
+        ports:
+        - name: http
+          containerPort: 80
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-service
+  namespace: qingyun
+spec:
+  selector:
+    app: demo-deploy-pod
+    release: canary
+  type: ClusterIP
+  ports:
+  - name: demo-svc-myapp
+    port: 30080
+    targetPort: 80
+

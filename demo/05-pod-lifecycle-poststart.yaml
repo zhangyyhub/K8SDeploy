@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-lifecycle-poststart-pod
+  namespace: qingyun
+spec:
+  containers:
+  - name: demo-lifecycle-poststart-container
+    image: busybox:latest
+    imagePullPolicy: IfNotPresent
+    lifecycle:
+      postStart:
+        exec:
+          command: ["mkdir","-p","/data/nginx/html"]
+    command: ["/bin/sh","-c","sleep 3600"]

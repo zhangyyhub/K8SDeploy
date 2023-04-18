@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+  namespace: qingyun
+  # labels: {app: myapp, tier: frontend}
+  labels:
+    app: myapp
+    tier: frontend
+spec:
+  containers:
+  # first container
+  - name: myapp-container
+    image: zhangyyhub/myapp:v1.0
+    imagePullPolicy: IfNotPresent
+    ports:
+    - name: http
+      containerPort: 80
+      protocol: TCP
+  # second container
+  - name: busybox
+    image: busybox:latest
+    imagePullPolicy: IfNotPresent
+    # command: ["/bin/sh", "-c", "sleep 3600"]
+    command:
+    - "/bin/sh"
+    - "-c"
+    - "sleep 3600"
+  restartPolicy: Always

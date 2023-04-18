@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-cm-1
+  namespace: qingyun
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: myapp
+    image: zhangyyhub/myapp:v1.0
+    imagePullPolicy: IfNotPresent
+    ports:
+    - name: http
+      containerPort: 80
+    env:
+    - name: NGINX_SERVER_PORT
+      valueFrom:
+        configMapKeyRef:
+          name: demo-cm
+          key: nginx_port
+          optional: false  # 默认为true，configMap必须存在 
+    - name: NGINX_SERVER_NAME
+      valueFrom:
+        configMapKeyRef:
+          name: demo-cm
+          key: server_name
+          optional: false  # 默认为true，configMap必须存在

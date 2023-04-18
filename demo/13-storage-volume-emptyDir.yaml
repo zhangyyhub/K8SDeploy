@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod
+  namespace: qingyun
+  labels:
+    app: demo-app
+    tier: frontend
+spec:
+  containers:
+  - name: demo-container
+    image: zhangyyhub/myapp:v1.0
+    ports:
+    - name: http
+      containerPort: 80
+    volumeMounts:
+    - name: data
+      mountPath: /data/web/html/
+  - name: busybox
+    image: busybox:latest
+    volumeMounts:
+    - name: data
+      mountPath: /data/
+    command:
+    - "/bin/sh"
+    - "-c"
+    - "sleep 7200"
+  volumes: 
+  - name: data
+    emptyDir: {}  # 空(映射)

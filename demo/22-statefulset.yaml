@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp
+  namespace: qingyun
+  labels:
+    app: myapp 
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
+  selector:
+    app: myapp-pod
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: myapp
+  namespace: qingyun
+spec:
+  serviceName: myapp
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myapp-pod
+  template:
+    metadata:
+      labels:
+        app: myapp-pod
+    spec:
+      containers:
+      - name: myapp
+        image: zhangyyhub/myapp:v1.0
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts:
+        - name: myappdata
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: myappdata
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 2Gi

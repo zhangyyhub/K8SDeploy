@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: demo-rs
+  namespace: qingyun
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: demo-rs-pod
+      release: canary
+  template:
+    metadata:             # pod metadata
+      name: demo-rs-pod   # useless name
+      labels:
+        app: demo-rs-pod
+        release: canary
+        env: qa
+    spec:
+      containers:
+      - name: demo-rs-pod-container
+        image: zhangyyhub/myapp:v1.0
+        ports:
+        - name: http
+          containerPort: 80
